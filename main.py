@@ -2,6 +2,7 @@
 __author__ = 'Fab'
 
 from Tkinter import *
+import save
 # from tkMessageBox import *
 
 
@@ -9,6 +10,28 @@ root = Tk()
 root.title("Texttool")
 root.resizable(width=FALSE, height=FALSE)
 root.minsize(width=100, height=200)
+
+# Erstellen des Dictionarys zum Speichern
+def preparesave():
+    savedict = {
+        "text": beispiel,
+        "annotations": {
+            "title": e_title.get(),
+            "author": e_author.get(),
+            "journal": e_journal.get(),
+            "volume": e_volume.get(),
+            "edition": e_edition.get(),
+            "year": e_year.get(),
+            "pagestart": e_pagestart.get(),
+            "pageend": e_pageend.get(),
+            "comment": e_comment.get(),
+            "tags": e_tags.get()
+        }
+
+    }
+    filename="text.xml"
+    #Dictionary an SpeicherModul übergeben
+    save.savexml(filename, savedict)
 
 
 # Frame fuer Textbereich
@@ -37,28 +60,29 @@ textfeld.insert(END,beispiel)
 
 # Eingabefelder
 Label(inputframe, text="Titel").grid(row=0,column=0, columnspan=1)
-e_titel=Entry(inputframe).grid(row=0,column=1, columnspan=1)
+e_title=Entry(inputframe).grid(row=0,column=1, columnspan=1)
 Label(inputframe, text="Autor").grid(row=1,column=0, columnspan=1)
-e_titel=Entry(inputframe).grid(row=1,column=1, columnspan=1)
+e_author=Entry(inputframe).grid(row=1,column=1, columnspan=1)
 Label(inputframe, text="Zeitschrift").grid(row=2,column=0, columnspan=1)
-e_titel=Entry(inputframe).grid(row=2,column=1, columnspan=1)
+e_journal=Entry(inputframe).grid(row=2,column=1, columnspan=1)
 Label(inputframe, text="Band").grid(row=3,column=0, columnspan=1)
-e_titel=Entry(inputframe).grid(row=3,column=1, columnspan=1)
+e_volume=Entry(inputframe).grid(row=3,column=1, columnspan=1)
 Label(inputframe, text="Ausgabe").grid(row=4,column=0, columnspan=1)
-e_titel=Entry(inputframe).grid(row=4,column=1, columnspan=1)
+e_edition=Entry(inputframe).grid(row=4,column=1, columnspan=1)
 Label(inputframe, text="Publikationsjahr").grid(row=0,column=3, columnspan=1)
-e_titel=Entry(inputframe).grid(row=0,column=4, columnspan=1)
+e_year=Entry(inputframe).grid(row=0,column=4, columnspan=1)
 Label(inputframe, text="Seite(Anfang)").grid(row=1,column=3, columnspan=1)
-e_titel=Entry(inputframe).grid(row=1,column=4, columnspan=1)
+e_pagestart=Entry(inputframe).grid(row=1,column=4, columnspan=1)
 Label(inputframe, text="Seite (Ende)").grid(row=2,column=3, columnspan=1)
-e_titel=Entry(inputframe).grid(row=2,column=4, columnspan=1)
+e_pageend=Entry(inputframe).grid(row=2,column=4, columnspan=1)
 Label(inputframe, text="Anmerkungen").grid(row=3,column=3, columnspan=1)
-e_titel=Entry(inputframe).grid(row=3,column=4, columnspan=1)
+e_comment=Entry(inputframe).grid(row=3,column=4, columnspan=1)
 Label(inputframe, text="Tags").grid(row=4,column=3, columnspan=1)
-e_titel=Entry(inputframe).grid(row=4,column=4, columnspan=1)
+e_tags=Entry(inputframe).grid(row=4,column=4, columnspan=1)
 
+#Buttons für Info, Speichern, Beenden
 b_info=Button(inputframe, text="Info").grid(row=6,column=1)
-b_save=Button(inputframe, text="Speichern").grid(row=6,column=3)
+b_save=Button(inputframe, text="Speichern", command=preparesave()).grid(row=6,column=3)
 b_quit=Button(inputframe, text="Ende", command=root.quit()).grid(row=6,column=4)
 
 
