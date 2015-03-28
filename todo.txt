@@ -1,0 +1,7 @@
+*Verzeichnis mit Dateien einlesen
+*Textdateien in ListBox anzeigen lassen
+*Datei öffnen
+*Anmerkungen und Text zusammenführen
+*XML Datei speichern
+
+*Installationsanleitung
