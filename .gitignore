@@ -6,8 +6,10 @@ out/
 doc/
 
 # Geany
-
 *.bat
+
+# Python
+*.pyc
 
 
 # Windows
