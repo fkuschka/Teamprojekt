@@ -29,7 +29,7 @@ def preparesave():
         }
 
     }
-    filename="text.xml"
+    filename="test.xml"
     #Dictionary an SpeicherModul übergeben
     save.savexml(filename, savedict)
 
@@ -53,37 +53,37 @@ scrollbar.config(command=textfeld.yview)
 textfeld.config(yscrollcommand=scrollbar.set)
 
 
-beispiel="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+beispiel = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
 
 textfeld.insert(END,beispiel)
 
 
 # Eingabefelder
 Label(inputframe, text="Titel").grid(row=0,column=0, columnspan=1)
-e_title=Entry(inputframe).grid(row=0,column=1, columnspan=1)
+e_title = Entry(inputframe).grid(row=0,column=1, columnspan=1)
 Label(inputframe, text="Autor").grid(row=1,column=0, columnspan=1)
-e_author=Entry(inputframe).grid(row=1,column=1, columnspan=1)
+e_author = Entry(inputframe).grid(row=1,column=1, columnspan=1)
 Label(inputframe, text="Zeitschrift").grid(row=2,column=0, columnspan=1)
-e_journal=Entry(inputframe).grid(row=2,column=1, columnspan=1)
+e_journal = Entry(inputframe).grid(row=2,column=1, columnspan=1)
 Label(inputframe, text="Band").grid(row=3,column=0, columnspan=1)
-e_volume=Entry(inputframe).grid(row=3,column=1, columnspan=1)
+e_volume = Entry(inputframe).grid(row=3,column=1, columnspan=1)
 Label(inputframe, text="Ausgabe").grid(row=4,column=0, columnspan=1)
-e_edition=Entry(inputframe).grid(row=4,column=1, columnspan=1)
+e_edition = Entry(inputframe).grid(row=4,column=1, columnspan=1)
 Label(inputframe, text="Publikationsjahr").grid(row=0,column=3, columnspan=1)
-e_year=Entry(inputframe).grid(row=0,column=4, columnspan=1)
+e_year = Entry(inputframe).grid(row=0,column=4, columnspan=1)
 Label(inputframe, text="Seite(Anfang)").grid(row=1,column=3, columnspan=1)
-e_pagestart=Entry(inputframe).grid(row=1,column=4, columnspan=1)
+e_pagestart = Entry(inputframe).grid(row=1,column=4, columnspan=1)
 Label(inputframe, text="Seite (Ende)").grid(row=2,column=3, columnspan=1)
-e_pageend=Entry(inputframe).grid(row=2,column=4, columnspan=1)
+e_pageend = Entry(inputframe).grid(row=2,column=4, columnspan=1)
 Label(inputframe, text="Anmerkungen").grid(row=3,column=3, columnspan=1)
-e_comment=Entry(inputframe).grid(row=3,column=4, columnspan=1)
+e_comment = Entry(inputframe).grid(row=3,column=4, columnspan=1)
 Label(inputframe, text="Tags").grid(row=4,column=3, columnspan=1)
-e_tags=Entry(inputframe).grid(row=4,column=4, columnspan=1)
+e_tags = Entry(inputframe).grid(row=4,column=4, columnspan=1)
 
-#Buttons für Info, Speichern, Beenden
-b_info=Button(inputframe, text="Info").grid(row=6,column=1)
-b_save=Button(inputframe, text="Speichern", command=preparesave()).grid(row=6,column=3)
-b_quit=Button(inputframe, text="Ende", command=root.quit()).grid(row=6,column=4)
+# Buttons für Info, Speichern, Beenden
+b_info = Button(inputframe, text="Info").grid(row=6,column=1)
+b_save = Button(inputframe, text="Speichern", command=preparesave()).grid(row=6,column=3)
+b_quit = Button(inputframe, text="Ende", command=root.quit()).grid(row=6,column=4)
 
 
 root.mainloop()
