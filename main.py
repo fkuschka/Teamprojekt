@@ -4,7 +4,7 @@ __author__ = 'Fab'
 from Tkinter import *
 from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom.minidom import parseString
-# from tkMessageBox import *
+import codecs
 
 
 class Teamprojekt(object):
@@ -14,16 +14,16 @@ class Teamprojekt(object):
         root.resizable(width=FALSE, height=FALSE)
         root.minsize(width=100, height=200)
 
-# Frame fuer Textbereich
+        # Frame fuer Textbereich
         textframe = Frame(root, height=100, width=100)
         textframe.grid(row=0, column=0)
 
-# Frame für Eingabebereich
+        # Frame für Eingabebereich
         inputframe = Frame(root, height=50, width=100)
         inputframe.grid(row=1, column=0)
 
 
-# Textfeld + Scrollbar
+        # Textfeld + Scrollbar
 
         scrollbar = Scrollbar(textframe)
         textfeld = Text(textframe)
@@ -32,13 +32,13 @@ class Teamprojekt(object):
         scrollbar.config(command=textfeld.yview)
         textfeld.config(yscrollcommand=scrollbar.set)
 
-# Beispieltext
+        # Beispieltext
         self.beispiel = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
         textfeld.insert(END, self.beispiel)
         self.filename = "test.xml"
 
 
-# Eingabefelder
+        # Eingabefelder mit Titel erstellen
         Label(inputframe, text="Titel").grid(row=0, column=0, columnspan=1)
         self.e_title = Entry(inputframe)
         self.e_title.grid(row=0, column=1, columnspan=1)
@@ -70,59 +70,51 @@ class Teamprojekt(object):
         self.e_tags = Entry(inputframe)
         self.e_tags.grid(row=4, column=4, columnspan=1)
 
-# Buttons für Info, Speichern, Beenden
+        # Buttons für Info, Speichern, Beenden
         self.b_info = Button(inputframe, text="Info")
         self.b_info.grid(row=6, column=1)
-        self.b_save = Button(inputframe, text="Speichern", command=lambda: self.preparesave())
+        self.b_save = Button(inputframe, text="Speichern", command=lambda: self.savexml())
         self.b_save.grid(row=6, column=3)
+        self.b_quit = Button(inputframe, text="Beenden", command=root.quit)
+        self.b_quit.grid(row=6, column=4)
 
         root.mainloop()
 
-    # Erstellen des Dictionarys zum Speichern
-    def preparesave(self):
-        self.savedict = {
-            "text": self.beispiel,
-            "annotations": {
-                "title": self.e_title.get(),
-                "author": self.e_author.get(),
-                "journal": self.e_journal.get(),
-                "volume": self.e_volume.get(),
-                "edition": self.e_edition.get(),
-                "year": self.e_year.get(),
-                "pagestart": self.e_pagestart.get(),
-                "pageend": self.e_pageend.get(),
-                "comment": self.e_comment.get(),
-                "tags": self.e_tags.get()
-            }
-        }
-        # Dictionary an SpeicherModul übergeben
-        self.savexml()
-
+    # XML Elemente erstellen
     def savexml(self):
-
-# XML Elemente erstellen
 
         entry = Element('entry')
         text = SubElement(entry, "text")
+        text.text = self.beispiel
         annotations = SubElement(entry, "annotations")
         title = SubElement(annotations, "title")
+        title.text = self.e_title.get()
         author = SubElement(annotations, "author")
+        author.text = self.e_author.get()
         journal = SubElement(annotations, "journal")
+        journal.text = self.e_journal.get()
         volume = SubElement(annotations, "volume")
+        volume.text = self.e_volume.get()
         edition = SubElement(annotations, "edition")
+        edition.text = self.e_edition.get()
         year = SubElement(annotations, "year")
+        year.text = self.e_year.get()
         pagestart = SubElement(annotations, "pagestart")
+        pagestart.text = self.e_pagestart.get()
         pageend = SubElement(annotations, "pageend")
+        pageend.text = self.e_pageend.get()
         comment = SubElement(annotations, "comment")
+        comment.text = self.e_comment.get()
         tags = SubElement(annotations, "tags")
+        tags.text = self.e_tags.get()
 
         xml = tostring(entry)
         dom = parseString(xml)
         tosave = dom.toprettyxml('    ')
         print tosave
 
-        with open(self.filename, 'a') as output_file:
-            output_file.write(tosave)
+        with codecs.open(self.filename, 'w', 'utf-8') as output_file:
+            output_file.write(tosave.decode('utf-8'))
 
 
 if __name__ == "__main__":
