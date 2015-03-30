@@ -11,6 +11,9 @@ doc/
 # Python
 *.pyc
 
+#Projekt
+*.xml
+
 
 # Windows
 # =========================
