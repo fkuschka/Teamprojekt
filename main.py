@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sys
 import tkFileDialog
 from Tkinter import *
 from xml.etree.ElementTree import Element, SubElement, tostring
