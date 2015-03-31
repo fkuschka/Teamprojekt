@@ -1,43 +1,95 @@
 # -*- coding: utf-8 -*-
-__author__ = 'Fab'
 
+import os
+import sys
+import tkFileDialog
 from Tkinter import *
 from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom.minidom import parseString
 import codecs
 
-
-class Teamprojekt(object):
-    def __init__(self):
-        root = Tk()
-        root.title("Texttool")
-        root.resizable(width=FALSE, height=FALSE)
-        root.minsize(width=100, height=150)
-
-        # Frame fuer Textbereich
-        textframe = Frame(root, height=100, width=100)
-        textframe.grid(row=0, column=0)
-
-        # Frame für Eingabebereich
-        inputframe = Frame(root, height=50, width=100)
-        inputframe.grid(row=1, column=0)
+# Pfad zu den Dokumenten
+path = tkFileDialog.askdirectory()
 
 
-        # Textfeld + Scrollbar
+class Document:
+    text = ""
+    def __init__(self, filename, attributes):
+        file_handle = open(filename)
+        self.text = file_handle.read()
 
-        scrollbar = Scrollbar(textframe)
-        textfeld = Text(textframe)
-        scrollbar.pack(side=RIGHT, fill=Y)
-        textfeld.pack(side=LEFT, fill=Y)
-        scrollbar.config(command=textfeld.yview)
-        textfeld.config(yscrollcommand=scrollbar.set)
+# Alle Attribute eines Dokuments
+document_attributes = [
+    "Titel",
+    "Autor",
+    "Zeitschrift",
+    "Band",
+    "Ausgabe",
+    "Publikationsjahr",
+    "Startseite",
+    "Endseite",
+    "Anmerkungen",
+    "Tags"]
 
-        # Beispieltext
-        self.beispiel = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-        textfeld.insert(END, self.beispiel)
-        self.filename = "test.xml"
+# Dateinamen aller Dokumente
+document_filenames = os.listdir(path)
+
+# Die geladenen Dokumente indiziert durch ihren Dateinamen
+loaded_documents = {}
+for name in document_filenames:
+    loaded_documents[name] = Document(path+ "/" + name, document_attributes)
+    
+root = Tk()
+        
+# Frame für Eingabebereich
+inputframe = Frame(root, height=50, width=100)
+inputframe.grid(row=1, column=0)
 
 
+# Initialisiert die Benutzeroberfläche
+def initgui():
+    
+    document_view = DocumentView(root, document_attributes)
+    
+    # Buttons für Info, Speichern, Beenden
+    b_info = Button(inputframe, text="Info")
+    b_info.grid(row=6, column=1)
+    b_save = Button(inputframe, text="Speichern", command=lambda: document_view.savexml())
+    b_save.grid(row=6, column=3)
+    b_quit = Button(inputframe, text="Beenden", command=root.quit)
+    b_quit.grid(row=6, column=4)
+    
+    Label(inputframe, text="Dateien").grid(row=0, column=0)
+    listbox = Listbox(inputframe)
+    listbox.grid(row=1, column=0, rowspan=5, columnspan=1)
+    for item in document_filenames:
+        listbox.insert(END, item)
+    
+    # Anklicken in der Listbox zeigt das ausgewählte Dokument an.
+    def choose_document():
+        
+        # Angeklickten Namen herausfinden
+        current_document_name = listbox.get(listbox.curselection())
+        
+        # Dokument mit dem Namen im DocumentView anzeigen
+        document_view.update(loaded_documents[current_document_name])
+
+        # Filename setzen
+        document_view.filename = listbox.get(listbox.curselection())
+
+    listbox.bind("<<ListboxSelect>>", lambda event: choose_document())
+        
+    root.mainloop()
+
+
+class DocumentView:
+    entries = {}
+    current_document = None
+    filename = ""
+
+    def __init__(self, root, document_attributes):
+        self.document_attributes = document_attributes
+            
         # Eingabefelder mit Titel erstellen
         Label(inputframe, text="Titel").grid(row=0, column=2, columnspan=1)
         self.e_title = Entry(inputframe)
@@ -69,28 +121,44 @@ class Teamprojekt(object):
         Label(inputframe, text="Tags").grid(row=4, column=4, columnspan=1)
         self.e_tags = Entry(inputframe)
         self.e_tags.grid(row=4, column=5, columnspan=1)
+            
+        # Frame fuer Textbereich
+        textframe = Frame(root, height=100, width=100)
+        textframe.grid(row=0, column=0)
 
-        Label(inputframe, text="Dateien").grid(row=0, column=0)
-        self.listbox = Listbox(inputframe)
-        self.listbox.grid(row=1, column=0, rowspan=5, columnspan=1)
+        # Textfeld + Scrollbar
+        scrollbar = Scrollbar(textframe)
+        self.textfield = Text(textframe)
+        scrollbar.pack(side=RIGHT, fill=Y)
+        self.textfield.pack(side=LEFT, fill=Y)
+        scrollbar.config(command=self.textfield.yview)
+        self.textfield.config(yscrollcommand=scrollbar.set)
 
-        # Buttons für Info, Speichern, Beenden
-        self.b_info = Button(inputframe, text="Info")
-        self.b_info.grid(row=6, column=2)
-        self.b_save = Button(inputframe, text="Speichern", command=lambda: self.savexml())
-        self.b_save.grid(row=6, column=3)
-        self.b_quit = Button(inputframe, text="Beenden", command=root.quit)
-        self.b_quit.grid(row=6, column=4)
+        # Beispieltext
+        self.beispiel = "Datei auswaehlen"
+        self.textfield.insert(END, self.beispiel)
 
-        root.mainloop()
+    def update(self, document):
+        self.current_document = document
+        
+        # Anzeigen vom Text des neuen Dokuments
+        self.textfield.delete(1.0, END)
+        self.textfield.insert(END, document.text)
 
-    # XML Elemente erstellen
+    # XML Elemente und Baum erstellen
     def savexml(self):
-
+        # self.filename = self.listbox.get(self.listbox.curselection())+".xml"
+        # XML root
         entry = Element('entry')
+
+        # XML Eintrag fuer text
         text = SubElement(entry, "text")
         text.text = self.beispiel
+        # XML Verzeichnis fuer Anmerkungen
+
         annotations = SubElement(entry, "annotations")
+
+        # XML Eintraege fuer Anmerkungen
         title = SubElement(annotations, "title")
         title.text = self.e_title.get()
         author = SubElement(annotations, "author")
@@ -112,15 +180,18 @@ class Teamprojekt(object):
         tags = SubElement(annotations, "tags")
         tags.text = self.e_tags.get()
 
+        # XML in String parsen und schoen machen :)
         xml = tostring(entry)
         dom = parseString(xml)
         tosave = dom.toprettyxml('    ')
-        print tosave
+        # print tosave
+        # print self.filename
 
-        with codecs.open(self.filename, 'w', 'utf-8') as output_file:
+        # Dateiname schoen machen
+        new_filename = self.filename[:-4]
+
+        # XML in datei Speichern
+        with codecs.open(path + "/" + new_filename + ".xml", 'w', 'utf-8') as output_file:
             output_file.write(tosave.decode('utf-8'))
 
-
-if __name__ == "__main__":
-    projekt = Teamprojekt()
-
+initgui()
