@@ -7,8 +7,11 @@ from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom.minidom import parseString
 import codecs
 
+
+root = Tk()
+
 # Pfad zu den Dokumenten
-path = tkFileDialog.askdirectory()
+path = tkFileDialog.askdirectory(parent = root)
 
 
 class Document:
@@ -37,8 +40,7 @@ document_filenames = os.listdir(path)
 loaded_documents = {}
 for name in document_filenames:
     loaded_documents[name] = Document(path+ "/" + name, document_attributes)
-    
-root = Tk()
+
         
 # Frame für Eingabebereich
 inputframe = Frame(root, height=50, width=100)
