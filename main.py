@@ -3,6 +3,7 @@
 import os
 import tkFileDialog
 from Tkinter import *
+from tkMessageBox import *
 from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom.minidom import parseString
 import codecs
@@ -53,7 +54,7 @@ def initgui():
     document_view = DocumentView(root, document_attributes)
     
     # Buttons für Info, Speichern, Beenden
-    b_info = Button(inputframe, text="Info")
+    b_info = Button(inputframe, text="Info", command=lambda: show_info())
     b_info.grid(row=6, column=1)
     b_save = Button(inputframe, text="Speichern", command=lambda: document_view.savexml())
     b_save.grid(row=6, column=3)
@@ -81,6 +82,10 @@ def initgui():
     listbox.bind("<<ListboxSelect>>", lambda event: choose_document())
         
     root.mainloop()
+
+
+def show_info():
+    showinfo("Info","Projektseminar Wissensrepräsentation WS14/15 Teamprojekt von Fabian Kuschka-Kleibrink, Hilal Catak, Pascal Hiller")
 
 
 class DocumentView:
