@@ -1,0 +1,13 @@
+Installationsanleitung
+
+Windows
+
+-Python 2.6+ installieren und PATH-Variable gesetzt haben
+-Programm mit start.bat starten (alternativ über Powershell/Cmd mit "python Teamarbeit.py")
+-Verzeichnis mit Textdateien auswählen
+
+Linux
+
+-Die Pakete python und python-tk müssen vorhanden sein
+-Im Terminal mit "python Teamarbeit.py" das Programm starten
+-Verzeichnis mit Textdateien auswählen (Man muss sich im Verzeichnis befinden)
